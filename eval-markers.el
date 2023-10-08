@@ -23,7 +23,7 @@
 (defun eval-markers-new (char)
   (interactive "c")
   (unless (get major-mode 'eval-markers-eval-fn)
-    (error "No eval-fn for this major mode"))
+    (user-error "No eval-fn for this major mode"))
   (setf (alist-get char eval-markers-markers)
         (if eval-markers-want-classical-last-sexp-behaviour
             (save-excursion
@@ -34,12 +34,14 @@
 (defun eval-markers-eval (char)
   (interactive "c")
   (let ((m (alist-get char eval-markers-markers)))
+    (unless m
+      (user-error "No form registered at char %c" char))
     (with-current-buffer (marker-buffer m)
       (save-excursion
         (goto-char (marker-position m))
         (if-let ((eval-fn (get major-mode 'eval-markers-eval-fn)))
             (funcall eval-fn)
-          (error "No eval-fn for this major mode"))))))
+          (user-error "No eval-fn for this major mode"))))))
 
 (when (featurep 'cider)
   (put 'clojure-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (cider-eval-last-sexp))))
