@@ -16,12 +16,12 @@
 ;;
 ;;; Code:
 
-(require 'cider)
-
 (defvar eval-markers-markers nil)
 
 (defun eval-markers-new (char)
   (interactive "c")
+  (unless (get major-mode 'eval-markers-eval-fn)
+    (error "No eval-fn for this major mode"))
   (setf (alist-get char eval-markers-markers) (point-marker)))
 
 (defun eval-markers-eval (char)
@@ -30,8 +30,15 @@
     (with-current-buffer (marker-buffer m)
       (save-excursion
         (goto-char (marker-position m))
-        (forward-sexp)
-        (cider-eval-last-sexp)))))
+        (if-let ((eval-fn (get major-mode 'eval-markers-eval-fn)))
+            (funcall eval-fn)
+          (error "No eval-fn for this major mode"))))))
+
+(when (featurep 'cider)
+  (put 'clojure-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (cider-eval-last-sexp))))
+
+(put 'emacs-lisp-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (eros-eval-last-sexp nil)))
+
 
 (provide 'eval-markers)
 
