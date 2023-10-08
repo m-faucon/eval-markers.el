@@ -18,11 +18,18 @@
 
 (defvar eval-markers-markers nil)
 
+(defvar eval-markers-want-classical-last-sexp-behaviour nil)
+
 (defun eval-markers-new (char)
   (interactive "c")
   (unless (get major-mode 'eval-markers-eval-fn)
     (error "No eval-fn for this major mode"))
-  (setf (alist-get char eval-markers-markers) (point-marker)))
+  (setf (alist-get char eval-markers-markers)
+        (if eval-markers-want-classical-last-sexp-behaviour
+            (save-excursion
+              (backward-sexp)
+              (point-marker))
+            (point-marker))))
 
 (defun eval-markers-eval (char)
   (interactive "c")
@@ -39,7 +46,5 @@
 
 (put 'emacs-lisp-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (eros-eval-last-sexp nil)))
 
-
 (provide 'eval-markers)
-
 ;;; eval-markers.el ends here
