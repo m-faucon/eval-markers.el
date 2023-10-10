@@ -7,7 +7,7 @@ not on melpa yet, but nowadays package managers can often fetch from git, otherw
 
 `eval-markers-new` while on the first character of a form will prompt for a char, put a marker there, and record the association from this char to the marker.
 
-`eval-markers-eval` will prompt for a char, and eval the form starting with the associated marker
+`eval-markers-eval` will prompt for a char, and eval the form starting with the associated marker.
 
 # config
 
@@ -19,7 +19,8 @@ I really dislike this, but if that is your preference set this var to `t`, and t
 
 ## add/change another repl/lang
 `(put 'symbol-of-a-major-mode 'eval-markers-eval-fn some-fn)`
-currently there are 2 defaults implemented, for Clojoure (through cider) and for Elisp
+
+Currently there are 2 defaults implemented, for Clojure (through cider) and for Elisp.
 
 # faq
 why not use this https://www.gnu.org/software/emacs/manual/html_node/emacs/Position-Registers.html ? It's a possibility, but I don't know, maybe people use these for something else and don't want it to interfere...
