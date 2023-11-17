@@ -8,6 +8,8 @@ not on melpa yet, but nowadays package managers can often fetch from git, otherw
 `eval-markers-new` while on the first character of a form will prompt for a char, put a marker there, and record the association from this char to the marker.
 
 `eval-markers-eval` will prompt for a char, and eval the form starting with the associated marker.
+With universal argument, will toggle pretty printing if available.
+There is a `eval-markers-toggle-pp` command to do that independently of eval'ing (as the others, it prompts for a char) but there's rarely a reason to use it
 
 # config
 
