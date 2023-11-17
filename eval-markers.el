@@ -43,7 +43,7 @@
             (funcall eval-fn)
           (user-error "No eval-fn for this major mode"))))))
 
-(when (featurep 'cider)
+(with-eval-after-load 'cider
   (put 'clojure-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (cider-eval-last-sexp))))
 
 (put 'emacs-lisp-mode 'eval-markers-eval-fn (lambda () (forward-sexp) (eros-eval-last-sexp nil)))
